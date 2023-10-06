@@ -1,0 +1,1800 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Marketplace Platform Api",
+        "description": "Marketplace platform for develope",
+        "contact": {
+            "name": "ASt",
+            "email": "alexandr.statut@instafxgroup.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://shop/api/v1",
+            "description": "Dev API server"
+        }
+    ],
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Auth in API",
+                "description": "Auth in API",
+                "operationId": "auth.login",
+                "requestBody": {
+                    "description": "Category data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User email",
+                                        "type": "string",
+                                        "example": "admin@gmail.com"
+                                    },
+                                    "password": {
+                                        "description": "User password",
+                                        "type": "string",
+                                        "example": "qwerty12"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Token information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/token"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/user": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Auth user info",
+                "description": "Auth user info",
+                "operationId": "auth.user",
+                "responses": {
+                    "200": {
+                        "description": "User data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/components/schemas/user"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "description": "Logout",
+                "operationId": "auth.logout",
+                "responses": {
+                    "200": {
+                        "description": "Created category ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Refresh API token",
+                "description": "Refresh API token",
+                "operationId": "auth.refresh",
+                "responses": {
+                    "200": {
+                        "description": "Created category ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/token"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/category": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Category list",
+                "description": "Category list",
+                "operationId": "/category/index",
+                "parameters": [
+                    {
+                        "name": "parent",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                "0",
+                                "1"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of categories",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/category"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Add new category",
+                "description": "Add new category",
+                "operationId": "category.store",
+                "requestBody": {
+                    "description": "Category data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title"
+                                ],
+                                "properties": {
+                                    "parent_id": {
+                                        "description": "Parent category ID",
+                                        "type": "integer",
+                                        "example": "1",
+                                        "nullable": "true"
+                                    },
+                                    "title": {
+                                        "description": "Title",
+                                        "type": "string",
+                                        "example": "Test"
+                                    },
+                                    "about": {
+                                        "description": "Description",
+                                        "type": "string",
+                                        "example": "Some text",
+                                        "nullable": "true"
+                                    },
+                                    "status": {
+                                        "description": "Status",
+                                        "type": "integer",
+                                        "example": "0",
+                                        "nullable": "true"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created category ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/category/{id}": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Category info",
+                "description": "Category info",
+                "operationId": "category.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Category ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category unfo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/components/schemas/category"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Update category",
+                "description": "Update category",
+                "operationId": "category.update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Category ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Category data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "parent_id": {
+                                        "description": "Parent category ID",
+                                        "type": "integer",
+                                        "example": "1",
+                                        "nullable": "true"
+                                    },
+                                    "title": {
+                                        "description": "Title",
+                                        "type": "string",
+                                        "example": "Test",
+                                        "nullable": "true"
+                                    },
+                                    "about": {
+                                        "description": "Description",
+                                        "type": "string",
+                                        "example": "Some text",
+                                        "nullable": "true"
+                                    },
+                                    "status": {
+                                        "description": "Status",
+                                        "type": "integer",
+                                        "example": "0",
+                                        "nullable": "true"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update result",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Delete category",
+                "description": "Delete category",
+                "operationId": "category.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Category ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Destroy result",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "boolean",
+                                            "example": "true"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "There are some active events in this stream OR Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/order": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Order list",
+                "description": "Order list",
+                "operationId": "order.index",
+                "parameters": [
+                    {
+                        "name": "owner",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "about",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                "-1",
+                                "0",
+                                "1",
+                                "2",
+                                "3",
+                                "4",
+                                "5",
+                                "9"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of orders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/order"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Add new order",
+                "description": "Add new order",
+                "operationId": "order.store",
+                "requestBody": {
+                    "description": "Order data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title"
+                                ],
+                                "properties": {
+                                    "owner_id": {
+                                        "description": "Owner ID",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "about": {
+                                        "description": "Description",
+                                        "type": "string",
+                                        "example": "Some text",
+                                        "nullable": "true"
+                                    },
+                                    "status": {
+                                        "description": "Status",
+                                        "type": "integer",
+                                        "example": "0",
+                                        "nullable": "true"
+                                    },
+                                    "positions": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "order_id": {
+                                                    "description": "Order ID",
+                                                    "type": "integer",
+                                                    "example": "1",
+                                                    "nullable": "true"
+                                                },
+                                                "product_id": {
+                                                    "description": "Product ID",
+                                                    "type": "integer",
+                                                    "example": "2"
+                                                },
+                                                "price": {
+                                                    "description": "Product price",
+                                                    "type": "numeric",
+                                                    "format": "float",
+                                                    "example": "25000"
+                                                },
+                                                "discount": {
+                                                    "description": "Discount",
+                                                    "type": "numeric",
+                                                    "format": "float",
+                                                    "example": "2500"
+                                                },
+                                                "amount": {
+                                                    "description": "Total price",
+                                                    "type": "numeric",
+                                                    "format": "float",
+                                                    "example": "22500",
+                                                    "nullable": "true"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "collectionFormat": "multi"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created order ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/order/{id}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Order info",
+                "description": "Order info",
+                "operationId": "order.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Order ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order unfo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/components/schemas/order"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Order not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Update order",
+                "description": "Update order",
+                "operationId": "order.update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Order ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Order data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "owner_id": {
+                                        "description": "Ccategory ID",
+                                        "type": "integer",
+                                        "example": "1",
+                                        "nullable": "true"
+                                    },
+                                    "about": {
+                                        "description": "Description",
+                                        "type": "string",
+                                        "example": "Some text",
+                                        "nullable": "true"
+                                    },
+                                    "status": {
+                                        "description": "Status",
+                                        "type": "integer",
+                                        "example": "0",
+                                        "nullable": "true"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update result",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Delete order",
+                "description": "Delete order",
+                "operationId": "order.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Order ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Destroy result",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "boolean",
+                                            "example": "true"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Order not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "There are some active events in this stream OR Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/product": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Product list",
+                "description": "Product list",
+                "operationId": "product.index",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                "0",
+                                "1"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of products",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/product"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Add new product",
+                "description": "Add new product",
+                "operationId": "product.store",
+                "requestBody": {
+                    "description": "Product data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title"
+                                ],
+                                "properties": {
+                                    "category_id": {
+                                        "description": "Ccategory ID",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "title": {
+                                        "description": "Title",
+                                        "type": "string",
+                                        "example": "Test"
+                                    },
+                                    "about": {
+                                        "description": "Description",
+                                        "type": "string",
+                                        "example": "Some text",
+                                        "nullable": "true"
+                                    },
+                                    "unit": {
+                                        "description": "Unit type",
+                                        "type": "string",
+                                        "example": "kg"
+                                    },
+                                    "stock": {
+                                        "description": "Stock",
+                                        "type": "numeric",
+                                        "format": "float",
+                                        "example": "10"
+                                    },
+                                    "price": {
+                                        "description": "Price",
+                                        "type": "numeric",
+                                        "format": "float",
+                                        "example": "105.45"
+                                    },
+                                    "options": {
+                                        "description": "Some product options",
+                                        "type": "string",
+                                        "example": "Color - Green",
+                                        "nullable": "true"
+                                    },
+                                    "status": {
+                                        "description": "Status",
+                                        "type": "integer",
+                                        "example": "0",
+                                        "nullable": "true"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created product ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/product/{id}": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Product info",
+                "description": "Product info",
+                "operationId": "product.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product unfo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/components/schemas/product"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Update product",
+                "description": "Update product",
+                "operationId": "product.update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Product data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "category_id": {
+                                        "description": "Ccategory ID",
+                                        "type": "integer",
+                                        "example": "1",
+                                        "nullable": "true"
+                                    },
+                                    "title": {
+                                        "description": "Title",
+                                        "type": "string",
+                                        "example": "Test",
+                                        "nullable": "true"
+                                    },
+                                    "about": {
+                                        "description": "Description",
+                                        "type": "string",
+                                        "example": "Some text",
+                                        "nullable": "true"
+                                    },
+                                    "unit": {
+                                        "description": "Unit type",
+                                        "type": "string",
+                                        "example": "kg",
+                                        "nullable": "true"
+                                    },
+                                    "stock": {
+                                        "description": "Stock",
+                                        "type": "numeric",
+                                        "format": "float",
+                                        "example": "10",
+                                        "nullable": "true"
+                                    },
+                                    "price": {
+                                        "description": "Price",
+                                        "type": "numeric",
+                                        "format": "float",
+                                        "example": "105.45",
+                                        "nullable": "true"
+                                    },
+                                    "options": {
+                                        "description": "Some product options",
+                                        "type": "string",
+                                        "example": "Color - Green",
+                                        "nullable": "true"
+                                    },
+                                    "status": {
+                                        "description": "Status",
+                                        "type": "integer",
+                                        "example": "0",
+                                        "nullable": "true"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update result",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Delete product",
+                "description": "Delete product",
+                "operationId": "product.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Destroy result",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "boolean",
+                                            "example": "true"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "There are some active events in this stream OR Error: Bad request. When required parameters were not supplied.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/error_response"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "token": {
+                "title": "Token data",
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "example": "abcdef1234"
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "Bearer"
+                    },
+                    "expires_in": {
+                        "type": "integer",
+                        "example": "3600"
+                    }
+                },
+                "type": "object"
+            },
+            "error_response": {
+                "title": "Error response",
+                "properties": {
+                    "error": {
+                        "properties": {
+                            "app": {
+                                "type": "string",
+                                "example": "Some Api"
+                            },
+                            "code": {
+                                "type": "integer",
+                                "example": "400"
+                            },
+                            "msg": {
+                                "type": "string",
+                                "example": "Bad request"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "user": {
+                "title": "User data",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Admin"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "test@gmail.com"
+                    },
+                    "verified": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "null",
+                        "nullable": "true"
+                    },
+                    "created": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-10-04T16:33:11.000000Z"
+                    },
+                    "updated": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-10-04T16:33:11.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "category": {
+                "title": "Category data",
+                "properties": {
+                    "category_id": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "parent": {
+                        "type": "object",
+                        "example": "category scheme",
+                        "nullable": "true"
+                    },
+                    "title": {
+                        "type": "integer",
+                        "example": "Test"
+                    },
+                    "about": {
+                        "type": "string",
+                        "example": "Some text",
+                        "nullable": "true"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": "0"
+                    }
+                },
+                "type": "object"
+            },
+            "product": {
+                "title": "Product data",
+                "properties": {
+                    "product_id": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "category": {
+                        "$ref": "#/components/schemas/category"
+                    },
+                    "title": {
+                        "type": "integer",
+                        "example": "Test"
+                    },
+                    "about": {
+                        "type": "string",
+                        "example": "Some text",
+                        "nullable": "true"
+                    },
+                    "unit": {
+                        "type": "string",
+                        "example": "kg"
+                    },
+                    "stock": {
+                        "type": "numeric",
+                        "format": "float",
+                        "example": "kg"
+                    },
+                    "price": {
+                        "type": "numeric",
+                        "format": "float",
+                        "example": "kg"
+                    },
+                    "options": {
+                        "type": "string",
+                        "example": "Some JSON data"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": "0"
+                    }
+                },
+                "type": "object"
+            },
+            "order": {
+                "title": "Order data",
+                "properties": {
+                    "order_id": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "about": {
+                        "type": "string",
+                        "example": "Some text",
+                        "nullable": "true"
+                    },
+                    "items": {
+                        "type": "integer",
+                        "example": "5"
+                    },
+                    "amount": {
+                        "type": "numeric",
+                        "format": "float",
+                        "example": "5000"
+                    },
+                    "discount": {
+                        "type": "numeric",
+                        "format": "float",
+                        "example": "350"
+                    },
+                    "total_amount": {
+                        "type": "numeric",
+                        "format": "float",
+                        "example": "4650"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": "0"
+                    },
+                    "owner": {
+                        "$ref": "#/components/schemas/user"
+                    },
+                    "history": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/order_log"
+                        }
+                    },
+                    "positions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/order_position"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "order_position": {
+                "title": "Order position data",
+                "properties": {
+                    "record_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "product": {
+                        "$ref": "#/components/schemas/product"
+                    },
+                    "price": {
+                        "type": "numeric",
+                        "format": "float",
+                        "example": "5000"
+                    },
+                    "discount": {
+                        "type": "numeric",
+                        "format": "float",
+                        "example": "350"
+                    },
+                    "amount": {
+                        "type": "numeric",
+                        "format": "float",
+                        "example": "4650"
+                    }
+                },
+                "type": "object"
+            },
+            "order_log": {
+                "title": "Order log data",
+                "properties": {
+                    "record_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": "5"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "responses": {
+            "401": {
+                "description": "Error: Unauthorized.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Error: Bad request. When required parameters were not supplied.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/components/schemas/error_response"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "apiAuth": {
+                "type": "http",
+                "description": "Your token must be provided by Admin",
+                "name": "Api Client",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth in API"
+        },
+        {
+            "name": "Categories",
+            "description": "Product categories"
+        },
+        {
+            "name": "Products",
+            "description": "Products"
+        },
+        {
+            "name": "Orders",
+            "description": "Orders"
+        }
+    ],
+    "externalDocs": {
+        "description": "Docs",
+        "url": "https://shop/api/documentation"
+    }
+}
