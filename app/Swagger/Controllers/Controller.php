@@ -16,7 +16,7 @@ namespace App\Swagger\Controllers;
  * )
  *
  * @OA\Server(
- *      url="https://shop/api/v1",
+ *      url=L5_SWAGGER_CONST_HOST,
  *      description="Dev API server"
  * )
  *
