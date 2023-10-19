@@ -1,7 +1,7 @@
 ## Configuration
 
 After cloning repository, you will need to change some settings for yourself:
-Open the .env file and find:
+Open the .env.example file and find:
 - APP_ENV and set it to LOCAL or PRODUCTION
 - APP_DEBUG and set it to TRUE or FALSE
 - APP_URL and set it to {YOUR_DOMAIN}
@@ -23,8 +23,9 @@ Open the .env file and find:
 
 Now you can open the terminal into the project folder and run thees commands:
 - composer install
-- php artisan migrate --seed
 - mv -v .env.example .env
+- php artisan migrate --seed
+- php artisan l5-swagger:generate
 
 Now you can use tha API.
 
